@@ -34,7 +34,7 @@ if api_key:
         st.session_state["history"] = []
 
     if "generated" not in st.session_state:
-        st.session_state["generated"] = [f"안녕하세요! {uploaded_file.name}에 관해 질문 주세요."]
+        st.session_state["generated"] = [f"안녕하세요! 포스텍 교과목 정보 또는 시간표 생성에 관해 질문 주세요."]
 
     if "past" not in st.session_state:
         st.session_state["past"] = ["안녕하세요!"]
