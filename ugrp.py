@@ -46,7 +46,7 @@ if api_key:
 
     with container:  # 대화 내용 저장(기억)
         with st.form(key="Conv_Question", clear_on_submit=True):
-            user_input = st.text_input("질문:", placeholder="PDF 파일에 대해 얘기해볼까요? (:", key="input")
+            user_input = st.text_input("질문:", placeholder="무엇이든 물어보세요! (:", key="input")
             submit_button = st.form_submit_button(label="Send")
 
         if submit_button and user_input:
