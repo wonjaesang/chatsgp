@@ -17,61 +17,61 @@ if api_key:
 
     uploaded_file = st.sidebar.file_uploader("파일 업로드 (PDF)", type="pdf")
 
-        loader = PyPDFLoader('./data.pdf')
-        data = loader.load()
+    loader = PyPDFLoader('./data.pdf')
+    data = loader.load()
 
-        embeddings = OpenAIEmbeddings()
-        vectors = FAISS.from_documents(data, embeddings)
+    embeddings = OpenAIEmbeddings()
+    vectors = FAISS.from_documents(data, embeddings)
 
-        chain = ConversationalRetrievalChain.from_llm(
-            llm=ChatOpenAI(temperature=0.0, model_name="gpt-4"), retriever=vectors.as_retriever()
-        )
+    chain = ConversationalRetrievalChain.from_llm(
+        llm=ChatOpenAI(temperature=0.0, model_name="gpt-4"), retriever=vectors.as_retriever()
+    )
 
-        def conversational_chat(query):  # 문맥 유지를 위해 과거 대화 저장 이력에 대한 처리
-            result = chain({"question": query, "chat_history": st.session_state["history"]})
-            st.session_state["history"].append((query, result["answer"]))
-            return result["answer"]
+    def conversational_chat(query):  # 문맥 유지를 위해 과거 대화 저장 이력에 대한 처리
+        result = chain({"question": query, "chat_history": st.session_state["history"]})
+        st.session_state["history"].append((query, result["answer"]))
+        return result["answer"]
 
-        if "history" not in st.session_state:
-            st.session_state["history"] = []
+    if "history" not in st.session_state:
+        st.session_state["history"] = []
 
-        if "generated" not in st.session_state:
-            st.session_state["generated"] = [f"안녕하세요! {uploaded_file.name}에 관해 질문 주세요."]
+    if "generated" not in st.session_state:
+        st.session_state["generated"] = [f"안녕하세요! {uploaded_file.name}에 관해 질문 주세요."]
 
-        if "past" not in st.session_state:
-            st.session_state["past"] = ["안녕하세요!"]
+    if "past" not in st.session_state:
+        st.session_state["past"] = ["안녕하세요!"]
 
-        # 챗봇 이력에 대한 컨테이너
-        response_container = st.container()
-        # 사용자가 입력한 문장에 대한 컨테이너
-        container = st.container()
+    # 챗봇 이력에 대한 컨테이너
+    response_container = st.container()
+    # 사용자가 입력한 문장에 대한 컨테이너
+    container = st.container()
 
-        with container:  # 대화 내용 저장(기억)
-            with st.form(key="Conv_Question", clear_on_submit=True):
-                user_input = st.text_input("질문:", placeholder="PDF 파일에 대해 얘기해볼까요? (:", key="input")
-                submit_button = st.form_submit_button(label="Send")
+    with container:  # 대화 내용 저장(기억)
+        with st.form(key="Conv_Question", clear_on_submit=True):
+            user_input = st.text_input("질문:", placeholder="PDF 파일에 대해 얘기해볼까요? (:", key="input")
+            submit_button = st.form_submit_button(label="Send")
 
-            if submit_button and user_input:
-                output = conversational_chat(user_input)
+        if submit_button and user_input:
+            output = conversational_chat(user_input)
 
-                st.session_state["past"].append(user_input)
-                st.session_state["generated"].append(output)
+            st.session_state["past"].append(user_input)
+            st.session_state["generated"].append(output)
 
-        if st.session_state["generated"]:
-            with response_container:
-                for i in range(len(st.session_state["generated"])):
-                    message(
-                        st.session_state["past"][i],
-                        is_user=True,
-                        key=str(i) + "_user",
-                        avatar_style="fun-emoji",
-                        seed="Nala",
-                    )
-                    message(
-                        st.session_state["generated"][i],
-                        key=str(i),
-                        avatar_style="bottts",
-                        seed="Fluffy",
-                    )
+    if st.session_state["generated"]:
+        with response_container:
+            for i in range(len(st.session_state["generated"])):
+                message(
+                    st.session_state["past"][i],
+                    is_user=True,
+                    key=str(i) + "_user",
+                    avatar_style="fun-emoji",
+                    seed="Nala",
+                )
+                message(
+                    st.session_state["generated"][i],
+                    key=str(i),
+                    avatar_style="bottts",
+                    seed="Fluffy",
+                )
 else:
     st.warning("먼저 API 키를 입력해주세요!")
