@@ -8,3 +8,4 @@ tqdm
 numpy
 certifi
 langchain-community
+pypdf
