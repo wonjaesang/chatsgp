@@ -17,12 +17,7 @@ if api_key:
 
     uploaded_file = st.sidebar.file_uploader("파일 업로드 (PDF)", type="pdf")
 
-    if uploaded_file:
-        with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
-            tmp_file.write(uploaded_file.getvalue())
-            tmp_file_path = tmp_file.name
-
-        loader = PyPDFLoader(tmp_file_path)
+        loader = PyPDFLoader('./data.pdf')
         data = loader.load()
 
         embeddings = OpenAIEmbeddings()
