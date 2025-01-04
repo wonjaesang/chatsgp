@@ -15,8 +15,6 @@ api_key = st.sidebar.text_input("OpenAI API Key", type="password")
 if api_key:
     os.environ["OPENAI_API_KEY"] = api_key  # 환경 변수에 API 키 설정
 
-    uploaded_file = st.sidebar.file_uploader("파일 업로드 (PDF)", type="pdf")
-
     loader = PyPDFLoader('./data.pdf')
     data = loader.load()
 
