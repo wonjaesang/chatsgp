@@ -22,7 +22,7 @@ if api_key:
     vectors = FAISS.from_documents(data, embeddings)
 
     chain = ConversationalRetrievalChain.from_llm(
-        llm=ChatOpenAI(temperature=0.0, model_name="o1-2024-12-17"), retriever=vectors.as_retriever()
+        llm=ChatOpenAI(temperature=0.0, model_name="gpt-4o"), retriever=vectors.as_retriever()
     )
 
     def conversational_chat(query):  # 문맥 유지를 위해 과거 대화 저장 이력에 대한 처리
