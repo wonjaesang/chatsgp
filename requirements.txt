@@ -9,3 +9,4 @@ numpy
 certifi
 langchain-community
 pypdf
+tiktoken
